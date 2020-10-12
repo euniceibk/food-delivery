@@ -2,9 +2,9 @@
     class Database {
         // Database parameters
         private $database_host = 'localhost';
-        private $database_name = 'green_homes';
-        private $database_username = 'ossai';
-        private $database_password = 'ossai';
+        private $database_name = 'food_delivery';
+        private $database_username = 'localhost';
+        private $database_password = '';
         private $database_connection;
 
         public function connect() // must be public [& not __construct, cause it'll return a Database data type not PDO], else we can't call it elsewhere
