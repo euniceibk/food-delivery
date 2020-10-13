@@ -46,7 +46,7 @@ if (isset($data->cus_name, $data->qty, $data->addr, $data->food_name, $data->prc
         echo json_encode(
             array(
                 'message' => 'Order not created',
-                'response' => 'NOT OK',
+                'response' => 'OK',
                 'response_code' => http_response_code()
             )
         );

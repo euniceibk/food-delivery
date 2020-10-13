@@ -25,7 +25,7 @@ if ($total_number > 0) {
     $inventory_array = array();
     $inventory_array['response_code'] = http_response_code(200);
     $inventory_array['message'] = 'good request, no errors';
-    $inventory_array["response"]= 'OK';
+    $inventory_array['response']= 'OK';
     $inventory_array['data'] = array();
     
     while ($row = $results->fetch(PDO::FETCH_ASSOC)) {

@@ -35,7 +35,7 @@ if (isset($data->id)
         echo json_encode(
             array(
                 'message' => 'Verification returned false',
-                'response' => 'NOT OK',
+                'response' => 'OK',
                 'response_code' => http_response_code()
             )
         );
@@ -43,7 +43,7 @@ if (isset($data->id)
 } else { // if bad or empty data was provided
     echo json_encode(
         array(
-            'message' => 'Bad data provided',
+            'message' => 'Bad or empty data provided',
             'response' => 'NOT OK',
             'response_code' => http_response_code()
         )

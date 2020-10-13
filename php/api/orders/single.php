@@ -45,7 +45,7 @@ if ($total_number > 0) {
         'price' => $price
     );
 } else {
-    $order_details_arr['message'] = 'bad request, errors';
+    $order_details_arr['message'] = 'Bad request, errors';
     $order_details_arr['response_code'] = http_response_code();
 }
 

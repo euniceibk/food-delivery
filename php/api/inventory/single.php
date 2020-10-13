@@ -27,7 +27,7 @@ $total_number = $result->rowCount();
 $inventory_details_arr = array();
 
 if ($total_number > 0) {
-    $inventory_details_arr['message'] = 'good request, no errors';  
+    $inventory_details_arr['message'] = 'Good request, no errors';  
     $inventory_details_arr['response_code'] = http_response_code(200);
 
     // returns an array, $row is an array
