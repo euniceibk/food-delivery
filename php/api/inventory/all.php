@@ -31,7 +31,7 @@ if ($total_number > 0) {
     while ($row = $results->fetch(PDO::FETCH_ASSOC)) {
         extract($row);
 
-        $a_client = array(
+        $an_item = array(
             'price' => $price,
             'category' => $category,
             'id' => $id,
@@ -40,18 +40,18 @@ if ($total_number > 0) {
         );
 
         // Push to data index
-        array_push($inventory_array['data'], $a_client);
+        array_push($inventory_array['data'], $an_item);
     }
 
     // Turn to JSON & output
     echo json_encode($inventory_array);
     
 } else {
-    // No client
+    // No inventory
     echo json_encode(
         array(
             'message' => 'No inventory available',
-            'response' => 'NOT OK',
+            'response' => 'OK',
             'response_code' => http_response_code()
         )
     );

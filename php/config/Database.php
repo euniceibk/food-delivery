@@ -3,7 +3,7 @@
         // Database parameters
         private $database_host = 'localhost';
         private $database_name = 'food_delivery';
-        private $database_username = 'localhost';
+        private $database_username = 'root';
         private $database_password = '';
         private $database_connection;
 
@@ -17,7 +17,7 @@
                 $this->database_connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             } catch (PDOException $e) {
                 echo 'Connection Error:' . $e->getMessage();
-            } catch (\Throwable $th) {
+            } catch (Throwable $th) {
                 //throw $th;
             }
 
