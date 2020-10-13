@@ -72,4 +72,40 @@ class Orders {
 
     }
 
+    // Verify new client, an entry
+    public function verifyOrder($id) {
+        $query = 'SELECT * FROM ' . $this->table . '
+            WHERE
+            id = ?
+        ';
+
+        $stmt = $this->database_connection->prepare($query);
+
+        // Ensure safe data
+        $i = htmlspecialchars(strip_tags($id));
+
+        // Bind parameters to prepared stmt
+        $stmt->bindParam(1, $i);
+
+        if ($stmt->execute() && $stmt->rowCount() == 1) {
+
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            extract($row);
+
+            // Create array
+            return array(
+                'id' => $id,
+                'customer_name' => $customer_name,
+                'quantity' => $quantity,
+                'address' => $address,
+                'name_of_food' => $name_of_food,
+                'time_of_order' => $time_of_order,
+                'price' => $price,
+            ); // SHOULD RETURN AN OBJECT OF THE agent data
+        } else {
+            return array();
+        }
+    }
+
 }

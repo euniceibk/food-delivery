@@ -5,29 +5,29 @@ header('Content-Type: application/json');
 
 // Resources
 include_once '../../config/Database.php';
-include_once '../../model/Agents.php';
+include_once '../../model/Orders.php';
 
 // Instantiate Database to get a connection
 $database_connection = new Database();
 $a_database_connection = $database_connection->connect();
 
-// Instantiate green homes agents object
-$agent = new Agents($a_database_connection);
+// Instantiate green homes orders object
+$order = new Orders($a_database_connection);
 
-// Get ID [& set agent id if id available]
-$agent_id = isset($_GET['id']) ? $_GET['id'] : die(); // die? or appropriate msg
+// Get ID [& set order id if id available]
+$order_id = isset($_GET['id']) ? $_GET['id'] : die(); // die? or appropriate msg
 
-// Get the agent [details]
-$result = $agent->getSingleAgentByID($agent_id);
+// Get the order [details]
+$result = $order->getSingleOrderByID($order_id);
 
 // Get total number
 $total_number = $result->rowCount();
 
-$agent_details_arr = array();
+$order_details_arr = array();
 
 if ($total_number > 0) {
-    $agent_details_arr['message'] = 'good request, no errors';  
-    $agent_details_arr['response_code'] = http_response_code(200);
+    $order_details_arr['message'] = 'good request, no errors';  
+    $order_details_arr['response_code'] = http_response_code(200);
 
     // returns an array, $row is an array
     $row = $result->fetch(PDO::FETCH_ASSOC);
@@ -35,16 +35,20 @@ if ($total_number > 0) {
     extract($row);
 
     // Create array
-    $agent_details_arr['data'] = array(
+    $order_details_arr['data'] = array(
         'id' => $id,
-        'email' => $email,
-        'phone_number_1' => $phone_number_1,
+        'customer_name' => $customer_name,
+        'quantity' => $quantity,
+        'address' => $address,
+        'name_of_food' => $name_of_food,
+        'time_of_order' => $time_of_order,
+        'price' => $price
     );
 } else {
-    $agent_details_arr['message'] = 'bad request, errors';
-    $agent_details_arr['response_code'] = http_response_code();
+    $order_details_arr['message'] = 'bad request, errors';
+    $order_details_arr['response_code'] = http_response_code();
 }
 
 
 // Make json and output
-print_r(json_encode($agent_details_arr));
+print_r(json_encode($order_details_arr));

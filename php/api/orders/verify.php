@@ -5,27 +5,25 @@ header('Content-Type: application/json');
 
 // Resources
 include_once '../../config/Database.php';
-include_once '../../model/Agents.php';
+include_once '../../model/Orders.php';
 
 // Instantiate Database to get a connection
 $database_connection = new Database();
 $a_database_connection = $database_connection->connect();
 
-// Instantiate green homes agents object
-$agent = new Agents($a_database_connection);
+// Instantiate food delivery order object
+$order = new Orders($a_database_connection);
 
 // get data
 $data = json_decode(file_get_contents('php://input'));
 
-if (isset($data->password, $data->email)
+if (isset($data->id)
     &&
-    !empty($data->password)
-    &&
-    !empty($data->email) 
+    !empty($data->id)
 ) { // if good data was provided
-    // Verify the agent [details]
-    $result = $agent->verifyAgent($data->password, $data->email);
-    if ($result) { 
+    // Verify the order [details]
+    $result = $order->verifyOrder($data->id);
+    if ($result) {
         echo json_encode(
             array(
                 'message' => 'Verified returned true',

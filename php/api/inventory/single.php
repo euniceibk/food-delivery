@@ -6,29 +6,29 @@ header('Content-Type: application/json');
 
 // Resources
 include_once '../../config/Database.php';
-include_once '../../model/Orders.php';
+include_once '../../model/Inventory.php';
 
 // Instantiate Database to get a connection
 $database_connection = new Database();
 $a_database_connection = $database_connection->connect();
 
-// Instantiate green homes Orders object
-$order = new Orders($a_database_connection);
+// Instantiate food delivery Inventory object
+$inventory = new Inventory($a_database_connection);
 
-// Get ID [& set order id if id available]
-$order_id = isset($_GET['id']) ? $_GET['id'] : die(); // die? or appropriate msg
+// Get ID [& set inventory id if id available]
+$inventory_id = isset($_GET['id']) ? $_GET['id'] : die(); // die? or appropriate msg
 
-// Get the order [details]
-$result = $order->getSingleOrderByID($order_id);
+// Get the inventory [details]
+$result = $inventory->getSingleInventoryByID($inventory_id);
 
 // Get total number
 $total_number = $result->rowCount();
 
-$order_details_arr = array();
+$inventory_details_arr = array();
 
 if ($total_number > 0) {
-    $order_details_arr['message'] = 'good request, no errors';  
-    $order_details_arr['response_code'] = http_response_code(200);
+    $inventory_details_arr['message'] = 'good request, no errors';  
+    $inventory_details_arr['response_code'] = http_response_code(200);
 
     // returns an array, $row is an array
     $row = $result->fetch(PDO::FETCH_ASSOC);
@@ -36,17 +36,18 @@ if ($total_number > 0) {
     extract($row);
 
     // Create array
-    $order_details_arr['data'] = array(
+    $inventory_details_arr['data'] = array(
         'id' => $id,
-        'first_name' => $first_name,
-        'last_name' => $last_name,
-        'phone_numbers' => $phone_numbers,
+        'name' => $name,
+        'available' => $available,
+        'category' => $category,
+        'price' => $price
     );
 } else {
-    $order_details_arr['message'] = 'bad request, errors';
-    $order_details_arr['response_code'] = http_response_code();
+    $inventory_details_arr['message'] = 'bad request, errors';
+    $inventory_details_arr['response_code'] = http_response_code();
 }
 
 
 // Make json and output
-print_r(json_encode($order_details_arr));
+print_r(json_encode($inventory_details_arr));

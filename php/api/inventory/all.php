@@ -5,51 +5,52 @@ header('Content-Type: application/json');
 
 // Resources
 include_once '../../config/Database.php';
-include_once '../../model/Clients.php';
+include_once '../../model/Inventory.php';
 
 // Instantiate Database to get a connection
 $database_connection = new Database();
 $a_database_connection = $database_connection->connect();
 
-// Instantiate green homes clients object
-$clients = new Clients($a_database_connection);
+// Instantiate food delivery inventory object
+$inventory = new Inventory($a_database_connection);
 
-// green homes clients query
-$results = $clients->getAllClients();
+// food delivery inventory query
+$results = $inventory->getAllInventory();
 
 // Get total number
 $total_number = $results->rowCount();
 
-// Check the number of clients gotten
+// Check the number of inventory gotten
 if ($total_number > 0) {
-    $clients_array = array();
-    $clients_array['response_code'] = http_response_code(200);
-    $clients_array['message'] = 'good request, no errors';
-    $clients_array["response"]= 'OK';
-    $clients_array['data'] = array();
+    $inventory_array = array();
+    $inventory_array['response_code'] = http_response_code(200);
+    $inventory_array['message'] = 'good request, no errors';
+    $inventory_array["response"]= 'OK';
+    $inventory_array['data'] = array();
     
     while ($row = $results->fetch(PDO::FETCH_ASSOC)) {
         extract($row);
 
-        $a_client = array( // later add an object of states the client operates in
-            'firstname' => $first_name,
-            'lastname' => $last_name,
+        $a_client = array(
+            'price' => $price,
+            'category' => $category,
             'id' => $id,
-            // 'phonenumbers' => $phone_numbers // will change to contact_id
+            'available' => $available,
+            'name' => $name // will change to contact_id
         );
 
         // Push to data index
-        array_push($clients_array['data'], $a_client);
+        array_push($inventory_array['data'], $a_client);
     }
 
     // Turn to JSON & output
-    echo json_encode($clients_array);
+    echo json_encode($inventory_array);
     
 } else {
     // No client
     echo json_encode(
         array(
-            'message' => 'No clients available',
+            'message' => 'No inventory available',
             'response' => 'NOT OK',
             'response_code' => http_response_code()
         )

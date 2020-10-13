@@ -53,4 +53,42 @@ class Inventory {
 
     }
 
+
+    // TODO
+    public function addToInventory($name, $available, $category, $price)
+    {
+
+        // Create query
+        $query = 'INSERT INTO ' . $this->table . '
+            SET
+            name = :name,
+            available = :available,
+            category = :category,
+            price = :price
+        ';
+
+        // Prepare statement
+        $stmt = $this->database_connection->prepare($query);
+
+        // Ensure safe data
+        $n = htmlspecialchars(strip_tags($name));
+        $a = htmlspecialchars(strip_tags($available));
+        $c = htmlspecialchars(strip_tags($category));
+        $p = htmlspecialchars(strip_tags($price));
+
+        // Bind parameters to prepared stmt
+        $stmt->bindParam(':name', $n);
+        $stmt->bindParam(':available', $a);
+        $stmt->bindParam(':category', $c);
+        $stmt->bindParam(':price', $p);
+
+        // Execute query statement
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
 }
