@@ -8,32 +8,36 @@ header('Content-Control-Allow-Headers: Content-Control-Allow-Methods, Content-Ty
 
 // Resources
 include_once '../../config/Database.php';
-include_once '../../model/Agents.php';
+include_once '../../model/Orders.php';
 
 // Instantiate Database to get a connection
 $database_connection = new Database();
 $a_database_connection = $database_connection->connect();
 
 // Instantiate green homes clients object
-$agent = new Agents($a_database_connection);
+$order = new Orders($a_database_connection);
 
 // get data
 $data = json_decode(file_get_contents('php://input'));
 
-if (isset($data->password, $data->phonenumber, $data->email)
+if (isset($data->cus_name, $data->qty, $data->addr, $data->food_name, $data->prc)
     &&
-    !empty($data->password)
+    !empty($data->cus_name)
     &&
-    !empty($data->phonenumber)
+    !empty($data->qty)
     &&
-    !empty($data->email) 
+    !empty($data->addr)
+    &&
+    !empty($data->food_name)
+    &&
+    !empty($data->prc) 
 ) { // if good data was provided
-    // Create the agent [details]
-    $result = $agent->createAgent($data->password, $data->phonenumber, $data->email);
+    // Create the order [details]
+    $result = $order->createOrder($data->cus_name, $data->qty, $data->addr, $data->food_name, $data->prc);
     if ($result) { 
         echo json_encode(
             array(
-                'message' => 'House agent created',
+                'message' => 'Order created',
                 'response' => 'OK',
                 'response_code' => http_response_code()
             )
@@ -41,7 +45,7 @@ if (isset($data->password, $data->phonenumber, $data->email)
     } else {
         echo json_encode(
             array(
-                'message' => 'Could not create house agent',
+                'message' => 'Order not created',
                 'response' => 'NOT OK',
                 'response_code' => http_response_code()
             )

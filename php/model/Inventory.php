@@ -1,8 +1,8 @@
 <?php
-class Clients {
+class Inventory {
     // DB stuff
     public $database_connection;
-    private $table = 'clients';
+    private $table = 'inventory';
 
     // Client properties
     /* public $first_name;
@@ -20,8 +20,8 @@ class Clients {
         $this->database_connection = $a_database_connection;
     }
 
-    // Get all clients
-    public function getAllClients()
+    // Get all inventory
+    public function getAllInventory()
     {
         // Create query
         $query = 'SELECT * FROM ' . $this->table;
@@ -35,7 +35,7 @@ class Clients {
         return $query_statement;
     }
 
-    public function getSingleClientByID($id)
+    public function getSingleInventoryByID($id)
     {
         // Create query
         $query = 'SELECT * FROM ' . $this->table . ' WHERE id = ?';
