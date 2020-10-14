@@ -42,7 +42,7 @@ CREATE TABLE `inventory` (
 
 CREATE TABLE `orders` (
   `customer_name` varchar(90) COLLATE utf8_bin NOT NULL,
-  `quantity` int(11) NOT NULL,
+  `quantity` varchar(30) COLLATE utf8_bin NOT NULL,
   `address` varchar(90) COLLATE utf8_bin NOT NULL,
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `name_of_food` varchar(90) COLLATE utf8_bin NOT NULL,
