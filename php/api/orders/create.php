@@ -20,26 +20,27 @@ $order = new Orders($a_database_connection);
 // get data
 $data = json_decode(file_get_contents('php://input'));
 
-if (isset($data->cus_name, $data->qty, $data->addr, $data->food_name, $data->prc)
+if (isset($data->customer_name, $data->quantity, $data->address, $data->name_of_food, $data->price)
     &&
-    !empty($data->cus_name)
+    !empty($data->customer_name)
     &&
-    !empty($data->qty)
+    !empty($data->quantity)
     &&
-    !empty($data->addr)
+    !empty($data->address)
     &&
-    !empty($data->food_name)
+    !empty($data->name_of_food)
     &&
-    !empty($data->prc) 
+    !empty($data->price) 
 ) { // if good data was provided
     // Create the order [details]
-    $result = $order->createOrder($data->cus_name, $data->qty, $data->addr, $data->food_name, $data->prc);
+    $result = $order->createOrder($data->customer_name, $data->quantity, $data->address, $data->name_of_food, $data->price);
     if ($result) { 
         echo json_encode(
             array(
                 'message' => 'Order created',
                 'response' => 'OK',
-                'response_code' => http_response_code()
+                'response_code' => http_response_code(),
+                'row_id' => $result
             )
         );
     } else {

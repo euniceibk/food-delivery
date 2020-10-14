@@ -41,14 +41,16 @@ class Orders {
         $p = htmlspecialchars(strip_tags($prc));
 
         // Bind parameters to prepared stmt
-        $stmt->bindParam(':customer_name', $cn);
-        $stmt->bindParam(':quantity', $q);
-        $stmt->bindParam(':address', $a);
-        $stmt->bindParam(':name_of_food', $fn);
-        $stmt->bindParam(':price', $p);
+        $stmt->bindParam(':cus_name', $cn);
+        $stmt->bindParam(':qty', $q);
+        $stmt->bindParam(':addr', $a);
+        $stmt->bindParam(':food_name', $fn);
+        $stmt->bindParam(':prc', $p);
 
-        if ($stmt->execute()) {
-            return true;
+        $r = $stmt->execute();
+
+        if ($r) {
+            return $this->database_connection->lastInsertId();
         } else {
             return false;
         }
