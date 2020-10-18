@@ -36,6 +36,7 @@ if ($total_number > 0) {
             'category' => $category,
             'id' => $id,
             'available' => $available,
+            'image' => $image,
             'name' => $name // will change to contact_id
         );
 

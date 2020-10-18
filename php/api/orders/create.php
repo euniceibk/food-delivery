@@ -34,7 +34,7 @@ if (isset($data->customer_name, $data->quantity, $data->address, $data->name_of_
 ) { // if good data was provided
     // Create the order [details]
     $result = $order->createOrder($data->customer_name, $data->quantity, $data->address, $data->name_of_food, $data->price);
-    if ($result) { 
+    if ($result) {
         echo json_encode(
             array(
                 'message' => 'Order created',
