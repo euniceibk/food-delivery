@@ -36,8 +36,8 @@ if ($total_number > 0) {
             'category' => $category,
             'id' => $id,
             'available' => $available,
-            'image' => $image,
-            'name' => $name // will change to contact_id
+            'image' => 'https://placeholderltd.com/food-delivery/assets/images/' . $image,
+            'name' => $name
         );
 
         // Push to data index
