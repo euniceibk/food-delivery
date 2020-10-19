@@ -36,7 +36,7 @@ if ($total_number > 0) {
             'category' => $category,
             'id' => $id,
             'available' => $available,
-            'image' => 'https://placeholderltd.com/food-delivery/assets/images/' . $image,
+            'image' => 'https://placeholderltd.com/food-delivery/assets/images/' . rawurlencode($image), // https://www.php.net/manual/en/function.urlencode.php#56426
             'name' => $name
         );
 
