@@ -37,7 +37,8 @@ if ($total_number > 0) {
             'id' => $id,
             'available' => $available,
             'image' => 'https://placeholderltd.com/food-delivery/assets/images/' . rawurlencode($image), // https://www.php.net/manual/en/function.urlencode.php#56426
-            'name' => $name
+            'name' => $name,
+            'description' => $description
         );
 
         // Push to data index

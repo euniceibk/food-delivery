@@ -55,7 +55,7 @@ class Inventory {
 
 
     // TODO
-    public function addToInventory($name, $available, $category, $price)
+    public function addToInventory($name, $available, $category, $price, $description)
     {
 
         // Create query
@@ -64,7 +64,8 @@ class Inventory {
             name = :name,
             available = :available,
             category = :category,
-            price = :price
+            price = :price,
+            description = :description
         ';
 
         // Prepare statement
@@ -75,12 +76,14 @@ class Inventory {
         $a = htmlspecialchars(strip_tags($available));
         $c = htmlspecialchars(strip_tags($category));
         $p = htmlspecialchars(strip_tags($price));
+        $d = htmlspecialchars(strip_tags($description));
 
         // Bind parameters to prepared stmt
         $stmt->bindParam(':name', $n);
         $stmt->bindParam(':available', $a);
         $stmt->bindParam(':category', $c);
         $stmt->bindParam(':price', $p);
+        $stmt->bindParam(':description', $d);
 
         // Execute query statement
         if ($stmt->execute()) {
