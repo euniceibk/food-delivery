@@ -17,8 +17,6 @@ $order = new Orders($a_database_connection);
 // get data
 $data = json_decode(file_get_contents('php://input'));
 
-// Get ID [& set order id if id available]
-
 if (isset($data->id)) {
     $order_id =  $data->id;
         
@@ -48,7 +46,7 @@ if (isset($data->id)) {
 
         echo json_encode(
             array(
-                'message' => 'Order created',
+                'message' => 'Good request, no errors',
                 'response' => 'OK',
                 'response_code' => http_response_code(),
                 'order_details' => $order_details_arr

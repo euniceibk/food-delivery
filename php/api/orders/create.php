@@ -14,7 +14,7 @@ include_once '../../model/Orders.php';
 $database_connection = new Database();
 $a_database_connection = $database_connection->connect();
 
-// Instantiate green homes clients object
+// Instantiate food-delivery order object
 $order = new Orders($a_database_connection);
 
 // get data

@@ -3,6 +3,8 @@
 // Headers
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
+header('Content-Control-Allow-Methods: POST');
+header('Content-Control-Allow-Headers: Content-Control-Allow-Methods, Content-Type, Content-Control-Allow-Headers, Authorization, X-Requested-With');
 
 // Resources
 include_once '../../config/Database.php';
@@ -15,39 +17,73 @@ $a_database_connection = $database_connection->connect();
 // Instantiate food delivery Inventory object
 $inventory = new Inventory($a_database_connection);
 
-// Get ID [& set inventory id if id available]
-$inventory_id = isset($_GET['id']) ? $_GET['id'] : die(); // die? or appropriate msg
+// get data
+$data = json_decode(file_get_contents('php://input'));
 
-// Get the inventory [details]
-$result = $inventory->getSingleInventoryByID($inventory_id);
+if (isset($data->id)) { 
+    // Get ID [& set inventory id if id available]
+    $inventory_id = $data->id;
 
-// Get total number
-$total_number = $result->rowCount();
+    // Get the inventory [details]
+    $result = $inventory->getSingleInventoryByID($inventory_id);
 
-$inventory_details_arr = array();
+    // Get total number
+    $total_number = $result->rowCount();
 
-if ($total_number > 0) {
-    $inventory_details_arr['message'] = 'Good request, no errors';  
-    $inventory_details_arr['response_code'] = http_response_code(200);
+    $inventory_details_arr = array();
 
-    // returns an array, $row is an array
-    $row = $result->fetch(PDO::FETCH_ASSOC);
+    if ($total_number > 0) {
 
-    extract($row);
+        // returns an array, $row is an array
+        $row = $result->fetch(PDO::FETCH_ASSOC);
 
-    // Create array
-    $inventory_details_arr['data'] = array(
-        'id' => $id,
-        'name' => $name,
-        'available' => $available,
-        'category' => $category,
-        'price' => $price
-    );
+        extract($row);
+
+        // Create array
+        $inventory_details_arr = array(
+            'id' => $id,
+            'price' => $price,
+            'category' => $category,
+            'id' => $id,
+            'available' => $available,
+            'image' => 'https://placeholderltd.com/food-delivery/assets/images/' . rawurlencode($image), // https://www.php.net/manual/en/function.urlencode.php#56426
+            'name' => $name,
+            'description' => $description
+        );
+
+        echo json_encode(
+            array(
+                'message' => 'Good request, no errors',
+                'response' => 'OK',
+                'response_code' => http_response_code(),
+                'inventory_details' => $inventory_details_arr
+            )
+        );
+    } else {
+        echo json_encode(
+            array(
+                'message' => 'No such inventory in our records',
+                'response' => 'NOT OK',
+                'response_code' => http_response_code()
+            )
+        );
+
+        // $order_details_arr['message'] = 'Bad request, errors';
+        // $order_details_arr['response_code'] = http_response_code();
+    }
+
+
 } else {
-    $inventory_details_arr['message'] = 'bad request, errors';
-    $inventory_details_arr['response_code'] = http_response_code();
+    echo json_encode(
+        array(
+            'message' => 'Bad data provided',
+            'response' => 'NOT OK',
+            'response_code' => http_response_code()
+        )
+    );
 }
 
 
 // Make json and output
-print_r(json_encode($inventory_details_arr));
+// print_r(json_encode($inventory_details_arr));
+?>
