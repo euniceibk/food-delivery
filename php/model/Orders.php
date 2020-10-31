@@ -5,12 +5,14 @@ class Orders {
     private $table = 'orders';
 
     // Client properties
-    /* public $first_name;
+    /*
+    public $first_name;
     public $last_name;
     public $last_seen;
     public $middle_name;
     public $id;
-    public $phone_numbers; */
+    public $phone_numbers; 
+    */
 
     /**
      * Constructor taking db as params
@@ -20,15 +22,14 @@ class Orders {
         $this->database_connection = $a_database_connection;
     }
 
-    // Create new client, an entry
-    public function createOrder($cus_name, $qty, $addr, $food_name, $prc) {
+    // Create new order, an entry
+    public function createOrder($cus_name, $qty, $addr, $food_id) {
         $query = 'INSERT INTO ' . $this->table . '
             SET
             customer_name = :cus_name,
             quantity = :qty,
             address = :addr,
-            name_of_food = :food_name,
-            price = :prc
+            id_of_food = :food_id
         ';
 
         $stmt = $this->database_connection->prepare($query);
@@ -37,20 +38,19 @@ class Orders {
         $cn = htmlspecialchars(strip_tags($cus_name));
         $q = htmlspecialchars(strip_tags($qty));
         $a = htmlspecialchars(strip_tags($addr));
-        $fn = htmlspecialchars(strip_tags($food_name));
-        $p = htmlspecialchars(strip_tags($prc));
+        $fi = htmlspecialchars(strip_tags($food_id));
 
         // Bind parameters to prepared stmt
         $stmt->bindParam(':cus_name', $cn);
         $stmt->bindParam(':qty', $q);
         $stmt->bindParam(':addr', $a);
-        $stmt->bindParam(':food_name', $fn);
-        $stmt->bindParam(':prc', $p);
+        $stmt->bindParam(':food_id', $fi);
 
         $r = $stmt->execute();
 
         if ($r) {
             return $this->database_connection->lastInsertId();
+            // return $this.getSingleOrderByID($this->database_connection->lastInsertId());
         } else {
             return false;
         }
@@ -59,7 +59,19 @@ class Orders {
     public function getSingleOrderByID($id)
     {
         // Create query
-        $query = 'SELECT * FROM ' . $this->table . ' WHERE id = ?';
+        $query = 'SELECT ' .
+        'inventory.name, ' .
+        'inventory.price, ' .
+        'inventory.`image`, ' .
+        'inventory.price * orders.quantity AS total, ' .
+        'orders.time as time_of_order, ' .
+        'orders.address, ' .
+        'orders.customer_name, ' .
+        'orders.quantity ' .
+        'FROM inventory ' .
+        'RIGHT OUTER JOIN orders ON inventory.id = orders.id_of_food ' .
+        'WHERE orders.id = ?';
+        // $query = 'SELECT * FROM ' . $this->table . ' WHERE id = ?';
 
         // Prepare statement
         $query_statement = $this->database_connection->prepare($query);
@@ -101,9 +113,8 @@ class Orders {
                 'customer_name' => $customer_name,
                 'quantity' => $quantity,
                 'address' => $address,
-                'name_of_food' => $name_of_food,
-                'time_of_order' => $time_of_order,
-                'price' => $price,
+                'id_of_food' => $id_of_food,
+                'time' => $time_of_order
             ); // SHOULD RETURN AN OBJECT OF THE agent data
         } else {
             return array();

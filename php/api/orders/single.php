@@ -14,41 +14,71 @@ $a_database_connection = $database_connection->connect();
 // Instantiate green homes orders object
 $order = new Orders($a_database_connection);
 
+// get data
+$data = json_decode(file_get_contents('php://input'));
+
 // Get ID [& set order id if id available]
-$order_id = isset($_GET['id']) ? $_GET['id'] : die(); // die? or appropriate msg
 
-// Get the order [details]
-$result = $order->getSingleOrderByID($order_id);
+if (isset($data->id)) {
+    $order_id =  $data->id;
+        
+    // Get the order [details]
+    $result = $order->getSingleOrderByID($order_id);
 
-// Get total number
-$total_number = $result->rowCount();
+    // Get total number
+    $total_number = $result->rowCount();
 
-$order_details_arr = array();
+    if ($total_number > 0) {
+        // returns an array, $row is an array
+        $row = $result->fetch(PDO::FETCH_ASSOC);
 
-if ($total_number > 0) {
-    $order_details_arr['message'] = 'good request, no errors';  
-    $order_details_arr['response_code'] = http_response_code(200);
+        extract($row);
 
-    // returns an array, $row is an array
-    $row = $result->fetch(PDO::FETCH_ASSOC);
+        // Create array
+        $order_details_arr = array(
+            'customer_name' => $customer_name,
+            'quantity' => $quantity,
+            'address' => $address,
+            'price' => $price,
+            'image' => 'https://placeholderltd.com/food-delivery/assets/images/' . rawurlencode($image), // https://www.php.net/manual/en/function.urlencode.php#56426
+            'time_of_order' => $time_of_order,
+            'total' => $total,
+            'name' => $name
+        );
 
-    extract($row);
+        echo json_encode(
+            array(
+                'message' => 'Order created',
+                'response' => 'OK',
+                'response_code' => http_response_code(),
+                'order_details' => $order_details_arr
+            )
+        );
+    } else {
 
-    // Create array
-    $order_details_arr['data'] = array(
-        'id' => $id,
-        'customer_name' => $customer_name,
-        'quantity' => $quantity,
-        'address' => $address,
-        'name_of_food' => $name_of_food,
-        'time_of_order' => $time_of_order,
-        'price' => $price
-    );
+        echo json_encode(
+            array(
+                'message' => 'No such order in our records',
+                'response' => 'NOT OK',
+                'response_code' => http_response_code()
+            )
+        );
+
+        // $order_details_arr['message'] = 'Bad request, errors';
+        // $order_details_arr['response_code'] = http_response_code();
+    }
+
+
+    // Make json and output
+    // print_r(json_encode($order_details_arr));
 } else {
-    $order_details_arr['message'] = 'Bad request, errors';
-    $order_details_arr['response_code'] = http_response_code();
+    echo json_encode(
+        array(
+            'message' => 'Bad data provided',
+            'response' => 'NOT OK',
+            'response_code' => http_response_code()
+        )
+    );
 }
 
-
-// Make json and output
-print_r(json_encode($order_details_arr));
+?>
