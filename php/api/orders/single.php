@@ -38,7 +38,7 @@ if (isset($data->id)) {
             'quantity' => $quantity,
             'address' => $address,
             'price' => $price,
-            'image' => 'http://' . $_SERVER['HTTP_HOST'] . '/chuks/food_delivery/assets/images/' . rawurlencode($image), // https://www.php.net/manual/en/function.urlencode.php#56426
+            'image' => 'https://' .  $_SERVER['HTTP_HOST'] . '/chuks/food_delivery/assets/images/' . rawurlencode($image), // https://www.php.net/manual/en/function.urlencode.php#56426
             'time_of_order' => $time_of_order,
             'total' => $total,
             'name' => $name

@@ -38,7 +38,7 @@ if ($total_number > 0) {
             'category' => $category,
             'id' => $id,
             'available' => $available,
-            'image' => 'http://' . $_SERVER['HTTP_HOST'] . '/chuks/food_delivery/assets/images/' . rawurlencode($image), // https://www.php.net/manual/en/function.urlencode.php#56426
+            'image' => 'https://' .  $_SERVER['HTTP_HOST'] . '/chuks/food_delivery/assets/images/' . rawurlencode($image), // https://www.php.net/manual/en/function.urlencode.php#56426
             'name' => $name,
             'description' => $description
         );
